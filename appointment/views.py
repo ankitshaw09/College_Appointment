@@ -173,6 +173,10 @@ class BookAppointmentView(APIView):
             end_time=time_slot.end_time,
             is_cancelled=False,
         )
+        
+        # Mark the time slot as booked
+        time_slot.is_booked = True
+        time_slot.save()
 
         return Response(
             {
@@ -205,6 +209,9 @@ class CancelAppointmentView(APIView):
                         {"message": "You do not have permission to cancel this appointment."},
                         status=status.HTTP_403_FORBIDDEN,
                     )
+                    # Update time slot to available
+                appointment.time_slot.is_booked = False
+                appointment.time_slot.save()
                 appointment.is_cancelled = True
                 appointment.save()
                 return Response(
