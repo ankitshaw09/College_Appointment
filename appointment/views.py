@@ -261,5 +261,76 @@ class CheckAppointmentsView(APIView):
             status=status.HTTP_200_OK,
         )
         
+class CheckProfessorAppointmentsView(APIView):
+    permission_classes = [IsAuthenticated]  # Ensure the user is authenticated  
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        try :
+            professor = Professor.objects.get(custom_user=user)
+        except Professor.DoesNotExist:
+            return Response(
+                {"message": "Only professors can check their appointments."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+        # Fetch the professor's appointments
+        appointments = Appointment.objects.filter(
+            professor=user, is_cancelled=False
+        )
+        if not appointments.exists():
+            return Response(
+                {"message": "You do not have any appointments."},
+                status=status.HTTP_200_OK,
+            )
         
+        appointments_data = [
+            {
+                "appointment_id": appointment.appointment_id,
+                "student_name": appointment.student_name,
+                "student_college_id": appointment.student_college_id,
+                "student_department": appointment.student_department,
+                "date": appointment.date,
+                "start_time": appointment.start_time,
+                "end_time": appointment.end_time,
+            }
+            for appointment in appointments
+        ]
+        return Response(
+            {"message": "Here are your appointments.", "appointments": appointments_data},
+            status=status.HTTP_200_OK,
+        )
+        
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        refresh_token = request.data.get("refresh_token")
+        if not refresh_token:
+            return Response(
+                {"detail": "Refresh token is required."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+            token = RefreshToken(refresh_token)
+            # Use blacklist() if blacklist feature is enabled
+            try:
+                token.blacklist()
+            except AttributeError:
+                return Response(
+                    {"detail": "Token blacklist feature is not enabled."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            return Response(
+                {"message": "Logout successful."},
+                status=status.HTTP_200_OK,
+            )
+        except Exception as e:
+            return Response(
+                {"detail": str(e)},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+
 # 303
+

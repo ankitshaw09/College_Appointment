@@ -41,6 +41,9 @@ INSTALLED_APPS = [
     'appointment',
     'rest_framework_simplejwt',
     'rest_framework.authtoken',
+    "rest_framework_simplejwt.token_blacklist",
+    
+    'corsheaders',
     
 
 ]
@@ -64,8 +67,9 @@ from datetime import timedelta
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    'ROTATE_REFRESH_TOKENS': False,
+    'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
+    'AUTH_HEADER_TYPES': ('Bearer',),
 }
 # AUTH_USER_MODEL = 'appointment.Professor'
 # AUTH_USER_MODEL = 'appointment.Student'
@@ -80,6 +84,11 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
 ]
 
 CSRF_TRUSTED_ORIGINS = [

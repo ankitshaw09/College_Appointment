@@ -306,4 +306,13 @@ class CheckAppointmentsSerializer(serializers.Serializer):
             raise serializers.ValidationError("Invalid student ID.")
         return value
 
+class ProfessorCheckAppointmentsSerializer(serializers.Serializer):
+    professor_id = serializers.IntegerField()
+
+    def validate_professor_id(self, value):
+        if not Professor.objects.filter(id=value).exists():
+            raise serializers.ValidationError("Invalid professor ID.")
+        return value
+
+
 # 317
