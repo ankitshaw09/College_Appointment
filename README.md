@@ -158,7 +158,7 @@ Send a GET request to `/api/student/check_appointments/`.
 }
 
 ```
-
+{![alt text](<Screenshot 2025-01-04 105736.png>) ![alt text](<Screenshot 2025-01-04 105714.png>) ![alt text](<Screenshot 2025-01-04 105637.png>) ![alt text](<Screenshot 2025-01-04 105623.png>) ![alt text](<Screenshot 2025-01-04 105607.png>) ![alt text](<Screenshot 2025-01-04 105326.png>) ![alt text](<Screenshot 2025-01-04 105304.png>) ![alt text](<Screenshot 2025-01-04 105245.png>) ![alt text](<Screenshot 2025-01-04 105103.png>)}
 ---
 
 ## Contributing
